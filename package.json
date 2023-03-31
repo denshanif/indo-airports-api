@@ -1,0 +1,22 @@
+{
+  "name": "indo-airports-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --fix src --ext .js",
+    "start": "node src/server.js",
+    "dev": "eslint --fix src --ext .js && nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "firebase-admin": "^11.5.0",
+    "nanoid": "^3.3.6"
+  },
+  "devDependencies": {
+    "eslint": "^8.37.0"
+  }
+}
