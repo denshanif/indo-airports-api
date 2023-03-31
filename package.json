@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --fix src --ext .js",
-    "start": "node src/server.js",
-    "dev": "eslint --fix src --ext .js && nodemon src/server.js"
+    "lint": "eslint --fix api --ext .js",
+    "start": "node api/index.js",
+    "dev": "eslint --fix api --ext .js && nodemon api/index.js"
   },
   "keywords": [],
   "author": "",
