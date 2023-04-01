@@ -6,6 +6,11 @@ const { nanoid } = require('nanoid');
 
 app.use(express.json());
 
+// welcome message
+app.get('/', (req, res) => {
+  res.status(200).send('Welcome to Indo Airports API');
+});
+
 // get all airports
 app.get('/airports', async (req, res) => {
   const airportRef = db.collection('airports');
