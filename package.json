@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "19.x"},
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "lint": "eslint --fix api --ext .js",
     "start": "node api/index.js",
