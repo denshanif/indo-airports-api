@@ -3,7 +3,9 @@ const app = express();
 const port = 3000;
 const { db } = require('./firebase.js');
 const { nanoid } = require('nanoid');
+const cors = require('cors');
 
+app.use(cors());
 app.use(express.json());
 
 // welcome message
