@@ -15,7 +15,7 @@ app.get('/airports', async (req, res) => {
     snapshot.forEach((doc) => {
       airports.push(doc.data());
     });
-    res.send(airports);
+    res.status(200).send(airports);
   } else {
     res.status(404).send('No airports found in database');
   }
@@ -26,7 +26,7 @@ app.get('/airports/:id', async (req, res) => {
   const airportRef = db.collection('airports').doc(req.params.id);
   const doc = await airportRef.get();
   if (doc.exists) {
-    res.send(doc.data());
+    res.status(200).send(doc.data());
   } else {
     res.status(404).send(`Airport with id ${req.params.id} not found`);
   }
@@ -41,7 +41,7 @@ app.get('/airports/iata/:iata', async (req, res) => {
     snapshot.forEach((doc) => {
       airports.push(doc.data());
     });
-    res.send(airports);
+    res.status(200).send(airports);
   } else {
     res.status(404).send(`Airport with iata ${req.params.iata} not found`);
   }
@@ -56,7 +56,7 @@ app.get('/airports/icao/:icao', async (req, res) => {
     snapshot.forEach((doc) => {
       airports.push(doc.data());
     });
-    res.send(airports);
+    res.status(200).send(airports);
   } else {
     res.status(404).send(`Airport with icao ${req.params.icao} not found`);
   }
@@ -95,7 +95,7 @@ app.post('/airports', async (req, res) => {
 
     if (iataSnapshot.empty && icaoSnapshot.empty) {
       await airportRef.doc(id).set(airport);
-      res.send(airport);
+      res.status(201).send(airport);
     }
     else {
       res.status(400).send(`Airport with iata ${iata} or icao ${icao} already exists`);
@@ -105,6 +105,70 @@ app.post('/airports', async (req, res) => {
   }
 });
 
+app.post('/airports/bulk', async (req, res) => {
+  const airports = req.body;
+  const airportRef = db.collection('airports');
+  const newAirports = [];
+  const existingAirports = [];
+  const invalidAirports = [];
+
+  // check if response is an array
+  if (Array.isArray(airports)) {
+    // check if each airport has required fields
+    for (const airport of airports) {
+      const {
+        iata,
+        icao,
+        name,
+        city,
+        province,
+        country,
+      } = airport;
+
+      if (iata && icao && name && city && province && country) {
+        // check if airport already exists by iata or icao
+        const iataSnapshot = await airportRef.where('iata', '==', iata).get();
+        const icaoSnapshot = await airportRef.where('icao', '==', icao).get();
+
+        if (iataSnapshot.empty && icaoSnapshot.empty) {
+          newAirports.push(airport);
+        } else {
+          existingAirports.push(airport);
+        }
+      } else {
+        invalidAirports.push(airport);
+      }
+    }
+  } else {
+    return res.status(400).send('Request body must be an json array of airports');
+  }
+
+  // add new airports to database
+  for (const airport of newAirports) {
+    const id = nanoid();
+    const createdAt = new Date().toISOString();
+    const updatedAt = createdAt;
+    const newAirport = {
+      id,
+      iata: airport.iata,
+      icao: airport.icao,
+      name: airport.name,
+      city: airport.city,
+      province: airport.province,
+      country: airport.country,
+      createdAt,
+      updatedAt,
+    };
+    
+    await airportRef.doc(id).set(newAirport);
+  }
+
+  res.status.send({
+    newAirports,
+    existingAirports,
+    invalidAirports,
+  });
+});
 
 // put airport by iata
 app.put('/airports/iata/:iata', async (req, res) => {
@@ -154,7 +218,7 @@ app.put('/airports/iata/:iata', async (req, res) => {
         }
       }
       await airportRef.doc(id).set(updatedAirport);
-      res.send(updatedAirport);
+      res.status(200).send(updatedAirport);
     } else {
       res.status(404).send(`Airport with iata ${req.params.iata} not found`);
     }
@@ -211,7 +275,7 @@ app.put('/airports/icao/:icao', async (req, res) => {
         }
       }
       await airportRef.doc(id).set(updatedAirport);
-      res.send(updatedAirport);
+      res.status(200).send(updatedAirport);
     } else {
       res.status(404).send(`Airport with icao ${req.params.icao} not found`);
     }
@@ -255,7 +319,7 @@ app.patch('/airports/iata/:iata', async (req, res) => {
         updatedAt,
       };
       await airportRef.doc(id).set(updatedAirport);
-      res.send(updatedAirport);
+      res.status(200).send(updatedAirport);
     } else {
       res.status(404).send(`Airport with iata ${req.params.iata} not found`);
     }
@@ -299,7 +363,7 @@ app.patch('/airports/icao/:icao', async (req, res) => {
         updatedAt,
       };
       await airportRef.doc(id).set(updatedAirport);
-      res.send(updatedAirport);
+      res.status(200).send(updatedAirport);
     } else {
       res.status(404).send(`Airport with icao ${req.params.icao} not found`);
     }
@@ -320,7 +384,7 @@ app.delete('/airports/iata/:iata', async (req, res) => {
     const airport = airports[0];
     const id = airport.id;
     await airportRef.doc(id).delete();
-    res.send(`Airport with iata ${req.params.iata} deleted`);
+    res.status(200).send(`Airport with iata ${req.params.iata} deleted`);
   } else {
     res.status(404).send(`Airport with iata ${req.params.iata} not found`);
   }
@@ -338,7 +402,7 @@ app.delete('/airports/icao/:icao', async (req, res) => {
     const airport = airports[0];
     const id = airport.id;
     await airportRef.doc(id).delete();
-    res.send(`Airport with icao ${req.params.icao} deleted`);
+    res.status(200).send(`Airport with icao ${req.params.icao} deleted`);
   } else {
     res.status(404).send(`Airport with icao ${req.params.icao} not found`);
   }
