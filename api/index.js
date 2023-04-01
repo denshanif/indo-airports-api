@@ -10,7 +10,7 @@ app.use(express.json());
 
 // welcome message
 app.get('/', (req, res) => {
-  res.status(200).send('Welcome to Indo Airports API');
+  res.status(200).send(`Welcome to Indo Airports API </br> Created by Hanif Al Fathoni 2023 MIT License`);
 });
 
 // get all airports
