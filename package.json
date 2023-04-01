@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "19.x"},
   "scripts": {
     "lint": "eslint --fix api --ext .js",
     "start": "node api/index.js",
