@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=14.0.0"
+    "node": "latest"
   },
   "scripts": {
     "lint": "eslint --fix api --ext .js",
