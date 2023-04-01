@@ -14,12 +14,6 @@ Data is stored on [Firestore](https://firebase.google.com/docs/firestore) databa
 
 You can also see the data in indo-aiports.json file on /data folder.
 
-## Demo API
-
-You can try the API on [this link](https://lovely-chalk-mushroom.glitch.me/).
-
-The API is hosted on [Glitch](https://glitch.com/).
-
 ## API Endpoint Documentation and Usage
 
 Request and response format is in raw JSON.
