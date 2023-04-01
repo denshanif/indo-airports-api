@@ -16,7 +16,7 @@ You can also see the data in indo-aiports.json file on /data folder.
 
 ## Demo API
 
-You can try the API on <a href="https://lovely-chalk-mushroom.glitch.me/" target="_blank">this link.</a>.
+You can try the API on [this link](https://lovely-chalk-mushroom.glitch.me/){:target="_blank"}.
 
 The API is hosted on [Glitch](https://glitch.com/).
 
